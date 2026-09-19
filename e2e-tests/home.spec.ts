@@ -24,4 +24,14 @@ test.describe('Home Page', () => {
     // Check that the welcome message is present using more specific locator
     await expect(page.getByText('Find your next game! And maybe even back one! Explore our collection!')).toBeVisible();
   });
+
+  test('should allow users to combine category and publisher filters', async ({ page }) => {
+    await page.getByLabel('Action').check();
+    await page.getByLabel('CodeForge Studios').check();
+    await page.getByTestId('apply-filters-button').click();
+
+    await expect(page.getByRole('link', { name: /Cloud Conqueror/i })).toBeVisible();
+    await expect(page.getByRole('link', { name: /Pipeline Conquest/i })).toHaveCount(0);
+    await expect(page.getByTestId('clear-filters-link')).toBeVisible();
+  });
 });
